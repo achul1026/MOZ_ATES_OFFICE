@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<th:block layout:fragment="content">
+
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-4 text-gray-800" th:text="#{enforcement.infoModify.title}">교통단속 상세정보 수정</h1>
+
+        <div class="row">
+
+
+            <div class="col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary" th:text="|${tfcEnfMaster.tfcEnfId} #{enforcement.infoModify.subTitle}|">상세정보</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <form id="frmInfoModify">
+                                <input type="hidden" name="tfcEnfId" th:value="${tfcEnfMaster.tfcEnfId}">
+                                <table class="table table-bordered">
+                                    <colgroup>
+                                        <col width="20%">
+                                        <col width="30%">
+                                        <col width="20%">
+                                        <col width="30%">
+
+                                    </colgroup>
+                                    <tbody>
+
+                                    <tr>
+                                        <th th:text="#{enforcement.infoModify.violationNumber}">위반번호</th>
+                                        <td th:text="${tfcEnfMaster.tfcEnfId}"></td>
+                                        <th th:text="#{enforcement.infoModify.violationDate}">위반일시</th>
+                                        <td th:text="${tfcEnfMaster.tfcEnfDt}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th th:text="#{enforcement.infoModify.placeOfViolate}">위반장소</th>
+                                        <td><input type="text" id="txtRoadAddr" name="roadAddr" th:value="${tfcEnfMaster.roadAddr}"></td>
+                                        <th th:text="#{enforcement.infoModify.violatorsName}">위반자 명</th>
+                                        <td th:text="${tfcEnfMaster.vioId}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th th:text="#{enforcement.infoModify.intermittentName}">단속명</th>
+                                        <td><input type="text" id="txtLastTfcEnfProcCd" name="lastTfcEnfProcCd" th:value="${tfcEnfMaster.lastTfcEnfProcCd}"></td>
+                                        <th th:text="#{enforcement.infoModify.relatedAccidentInformation}">연관 사고 정보</th>
+                                        <td th:text="${tfcEnfMaster.tfcAcdntId}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th th:text="#{enforcement.infoModify.fine}">벌금</th>
+                                        <td><input type="text" id="txtTotalPrice" name="totalPrice" th:value="${tfcEnfMaster.finePymntInfo.totalPrice}"></td>
+                                         <th th:text="#{enforcement.infoModify.paymentStatus}">납부상태</th>
+                                    	<td th:text="${tfcEnfMaster.finePymntInfo.pymntStts} == 'Y'?'Paid':'Not Paid'"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                            <button type="button" id="btnGoList" class="btn btn-outline-danger" onclick="javascript:window.history.back()" th:text="#{enforcement.infoModify.cancellation}">취소</button>
+                            <button type="button" id="btnModify" class="btn btn-outline-success" th:text="#{enforcement.infoModify.save}" >저장</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+    </div>
+
+
+
+
+</th:block>
+</html>
+
+<script th:inline="javascript">
+    $("#btnModify").click(function () {
+
+
+        if($.trim($("#txtRoadAddr").val())==''){
+            alert("위반장소를 입력해주세요.");
+            $("#txtRoadAddr").focus();
+            return false;
+        }
+        if($.trim($("#txtLastTfcEnfProcCd").val())==''){
+            alert("단속명을 입력해주세요.");
+            $("#txtLastTfcEnfProcCd").focus();
+            return false;
+        }
+        if($.trim($("#txtTotalPrice").val())==''){
+            alert("벌금을 입력해주세요.");
+            $("#txtTotalPrice").focus();
+            return false;
+        }
+
+
+        $.ajax({
+            url: /*[[@{/enf/infoModifyAjax}]]*/ "/enf/infoModifyAjax",
+            type: "post",
+            data: $("#frmInfoModify").serialize(),
+            success: function(data){
+                if(data.code == "1"){
+                    alert("수정했습니다.");
+
+                    var baseUrl = /*[[@{/enf/infoDetail}]]*/ '';
+                    window.location.href=baseUrl+"?tfcEnfId="+[[${tfcEnfMaster.tfcEnfId}]];
+
+                }
+            }
+        });
+
+    })
+
+
+</script>

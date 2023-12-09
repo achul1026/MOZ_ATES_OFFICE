@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<th:block layout:fragment="content">
+
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 th:text="#{penalty.penalty.title.detail}" class="h3 mb-4 text-gray-800">범칙금 상세정보</h1>
+
+        <div class="row">
+
+            <div class="col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 th:text="#{penalty.penalty.detail}" class="m-0 font-weight-bold text-primary" >상세</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <colgroup>
+                                    <col width="20%">
+                                    <col width="30%">
+                                    <col width="20%">
+                                    <col width="30%">
+
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th th:text="#{penalty.penalty.number}">범칙금 번호</th>
+                                    <td th:text="${finePymntInfo.pymntId}"></td>
+                                    <th th:text="#{penalty.penalty.tfcEnfId}">단속번호</th>
+                                    <td th:text="${finePymntInfo.tfcEnfId}"></td>
+                                </tr>
+                                <tr>
+                                    <th th:text="#{enforcemnet.penalty.crDt}">등록일</th>
+                                    <td th:text="${finePymntInfo.crDt}"></td>
+                                    <th th:text="#{penalty.penalty.endDay}">마감일</th>
+                                    <td th:text="${finePymntInfo.pymntDdln}"></td>
+                                </tr>
+                                <tr>
+                                    <th th:text="#{penalty.penalty.totalPrice}">금액</th>
+                                    <td th:text="${finePymntInfo.totalPrice}"></td>
+                                    <th th:text="#{penalty.penalty.condition}">지불상태</th>
+                                    <td th:text="${finePymntInfo.pymntStts}=='Y'? #{penalty.common.condition.y} : #{penalty.common.condition.n}"></td>
+                                </tr>
+                                <tr>
+                                    <th th:text="#{penalty.penalty.method}">납부방법</th>
+                                    <td th:text="${finePymntInfo.cmCd.cdNm}"></td>
+                                    <th th:text="#{penalty.penalty.pymntOprtr}">납부담당자</th>
+                                    <td th:text="${finePymntInfo.pymntOprtr}"></td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                            <button th:text="#{penalty.common.listBack}" type="button" id="btnGoList" class="btn btn-outline-secondary" th:onclick="|location.href='@{/penalty/mngList}'|">목록</button>
+                            <button th:text="#{penalty.penalty.modify}" type="button" id="btnModify" class="btn btn-outline-warning" th:onclick="'location.href=\''+@{/penalty/mngModify(pymntId=${finePymntInfo.pymntId})}+'\''">수정</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+    </div>
+
+
+
+</th:block>
+</html>
+<script>
+
+
+
+</script>

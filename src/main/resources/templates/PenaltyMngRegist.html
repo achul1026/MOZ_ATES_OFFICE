@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<th:block layout:fragment="content">
+
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 th:text="#{penalty.penalty.title.regist}" class="h3 mb-4 text-gray-800">범칙금 등록</h1>
+
+        <div class="row">
+
+            <div class="col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 th:text="#{penalty.penalty.regist}" class="m-0 font-weight-bold text-primary" >등록</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <form id="frmPenaltyRegist">
+                                <table class="table table-bordered">
+                                    <colgroup>
+                                        <col width="20%">
+                                        <col width="30%">
+                                        <col width="20%">
+                                        <col width="30%">
+
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <th th:text="#{penalty.penalty.number}">범칙금 번호</th>
+                                        <td><input type="text" class="form-control" id="txtPymntId" name="pymntId" ></td>
+                                        <th th:text="#{penalty.penalty.tfcEnfId}">단속번호</th>
+                                        <td><input type="text" class="form-control" id="txtTfcEnfId" name="tfcEnfId" ></td>
+                                    </tr>
+                                    <tr>
+                                        <th th:text="#{enforcemnet.penalty.crDt}">등록일</th>
+                                        <td><input type="date" class="form-control" id="txtCrDt" name="crDt"></td>
+                                        <th th:text="#{penalty.penalty.endDay}">마감일</th>
+                                        <td><input type="date" class="form-control" id="txtPymntDdln" name="pymntDdln"></td>
+                                    </tr>
+                                    <tr>
+                                        <th th:text="#{penalty.penalty.totalPrice}">금액</th>
+                                        <td><input type="text" class="form-control" id="txtTotalPrice" name="totalPrice"></td>
+                                        <th th:text="#{penalty.penalty.condition}">지불상태</th>
+                                        <td>
+                                            <input type="radio" id="txtPymntSttsY" name="pymntStts" value="Y" >
+                                            <label for="txtPymntSttsY" th:text="#{penalty.penalty.condition.y}">완료</label>
+                                            <input type="radio" id="txtPymntSttsN" name="pymntStts" value="N" checked>
+                                            <label for="txtPymntSttsN" th:text="#{penalty.penalty.condition.x}">미완료</label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th th:text="#{penalty.penalty.method}">납부방법</th>
+                                        <td>
+                                            <select class="form-control" name="pymntMethod">
+                                                <th:block th:each="cd : ${cdList}">
+                                                    <option th:value="${cd.cdId}" th:text="${cd.cdNm}"></option>
+                                                </th:block>
+                                            </select>
+                                        </td>
+                                        <th th:text="#{penalty.penalty.pymntOprtr}">납부담당자</th>
+                                        <td><input type="text" class="form-control" id="txtPymntOprtr" name="pymntOprtr"></td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </form>
+                            <button th:text="#{penalty.common.listBack}" type="button" id="btnGoList" class="btn btn-outline-secondary" onclick="javascript:window.history.back()">목록</button>
+                            <button th:text="#{penalty.penalty.save}" type="button" id="btnRegist" class="btn btn-outline-success" >저장</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+    </div>
+
+
+
+</th:block>
+</html>
+<script th:inline="javascript">
+    $("#btnRegist").click(function () {
+
+
+        if($.trim($("#txtPymntId").val())==''){
+            alert("범칙금 번호를 입력해주세요.");
+            $("#txtPymntId").focus();
+            return false;
+        }
+        if($.trim($("#txtTfcEnfId").val())==''){
+            alert("단속번호를 입력해주세요.");
+            $("#txtTfcEnfId").focus();
+            return false;
+        }
+        if($.trim($("#txtCrDt").val())==''){
+            alert("등록일을 입력해주세요.");
+            $("#txtCrDt").focus();
+            return false;
+        }
+        if($.trim($("#txtPymntDdln").val())==''){
+            alert("마감일을 입력해주세요.");
+            $("#txtPymntDdln").focus();
+            return false;
+        }
+        if($.trim($("#txtTotalPrice").val())==''){
+            alert("금액을 입력해주세요.");
+            $("#txtTotalPrice").focus();
+            return false;
+        }
+        if($.trim($("#txtPymntOprtr").val())==''){
+            alert("남부담당자를 입력해주세요.");
+            $("#txtPymntOprtr").focus();
+            return false;
+        }
+
+
+        $.ajax({
+            url: /*[[@{/penalty/mngRegistAjax}]]*/ "/penalty/mngRegistAjax",
+            type: "post",
+            data: $("#frmPenaltyRegist").serialize(),
+            success: function(data){
+                if(data.code == "1"){
+                    alert("등록했습니다.");
+                    location.href=/*[[@{/penalty/mngList}]]*/ "";
+                }
+            }
+        });
+
+    })
+
+
+
+</script>
